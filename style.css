@@ -1,0 +1,134 @@
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+
+body {
+	background: #21303b;
+	color: #fff;
+}
+
+.app-title h2 {
+	letter-spacing: -3px;
+	font-size: 50px;
+	font-family: Helvetica, sans-serif;
+	font-weight: bold;
+	text-align: center;
+	padding-top: 10px;
+}
+
+.app-title {
+	/*stitching*/
+	outline: 1px dashed #98abb9;
+	outline-offset: -5px;
+
+	background-color: #556068;
+	height: 75px;
+	width: 300px;
+	margin: 15px auto;
+
+	/*shadow*/
+	-webkit-box-shadow: 2px 2px 2px #000;
+	-moz-box-shadow: 2px 2px 2px #000;
+	box-shadow: 2px 2px 2px #000;
+}
+
+.stiching {
+	display: flex;
+	font-size: 50px;
+	text-align: center;
+	padding-right: 4px;
+	float: right;
+
+	outline: 1px dashed #98abb9;
+	outline-offset: -5px;
+
+	background-color: #556068;
+	height: 50px;
+	width: 50px;
+	margin-right: 25px;
+	margin-top: -85px;
+
+	/*shadow*/
+	-webkit-box-shadow: 2px 2px 2px #000;
+	-moz-box-shadow: 2px 2px 2px #000;
+	box-shadow: 2px 2px 2px #000;
+}
+
+.stiching .app-add-btn__btn {
+	margin-left: 11px;
+	margin-top: -3.5px;
+}
+
+.stiching:hover {
+	cursor: pointer;
+}
+
+.card-hidden {
+	visibility: hidden;
+}
+
+.card {
+	display: flex;
+	flex-direction: column;
+	max-width: 300px;
+	float: right;
+	margin-right: 55px;
+
+	outline: 1px dashed #98abb9;
+	outline-offset: -5px;
+
+	background-color: #556068;
+	height: 250px;
+	width: 200px;
+	margin-right: 25px;
+
+	/*shadow*/
+	-webkit-box-shadow: 2px 2px 2px #000;
+	-moz-box-shadow: 2px 2px 2px #000;
+	box-shadow: 2px 2px 2px #000;
+}
+
+.card > * {
+	margin: 5px 10px;
+}
+
+.card > :last-child {
+	margin-bottom: 15px;
+}
+
+.gallery {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.gallery-card {
+	/*stitching*/
+	outline: 1px dashed #98abb9;
+	outline-offset: -5px;
+
+	background-color: #556068;
+	height: 75px;
+	width: 300px;
+	margin: 15px 15px;
+
+	height: 200px;
+	width: 200px;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-around;
+
+	/*shadow*/
+	-webkit-box-shadow: 2px 2px 2px #000;
+	-moz-box-shadow: 2px 2px 2px #000;
+	box-shadow: 2px 2px 2px #000;
+}
+
+.gallery-card > :nth-child(1),
+.gallery-card > :nth-child(2),
+.gallery-card > :nth-child(3) {
+	border-bottom: 0.1px solid black;
+}

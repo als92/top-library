@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Online Book Library</title>
+		<link rel="stylesheet" href="./style.css" />
+		<link
+			rel="stylesheet"
+			src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+		/>
+	</head>
+	<body>
+		<header class="app">
+			<div class="app-title">
+				<h2 data-heading="My Library">MY LIBRARY</h2>
+			</div>
+			<div class="app-add-btn stiching">
+				<div class="app-add-btn__btn">+</div>
+			</div>
+		</header>
+		<section class="card-input">
+			<form class="card card-hidden">
+				<p>Title</p>
+				<input type="text" class="card-title" />
+				<p>Author</p>
+				<input type="text" class="card-author" />
+				<p>Pages</p>
+				<input type="number" class="card-pages" />
+				<div class="was-it-read">
+					<label for="read">Is it Read ?</label>
+					<input type="checkbox" name="read" id="read" />
+				</div>
+				<button class="card-add">Add Book</button>
+			</form>
+		</section>
+		<div class="gallery">
+			<!-- <div class="gallery-card">
+				<p>Atomic Habits</p>
+				<p>James Clear</p>
+				<p>288 pages</p>
+				<button>NOT READ</button>
+				<button>DELETE</button>
+			</div>
+		</div> -->
+		<footer>
+			<div class="social"></div>
+		</footer>
+		<script src="./script.js"></script>
+	</body>
+</html>
