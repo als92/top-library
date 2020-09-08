@@ -13,9 +13,17 @@ addToLibrary.addEventListener("click", (ev) => {
 	card.reset();
 });
 
+let myLibrary = [
+	{ title: "Atomic Habits", author: "James Clear", pages: "222", read: true },
+	{ title: "Can't Hurt Me", author: "David Goggins", pages: "225", read: true },
+];
+
+let unique;
+
 function renderBook() {
-	let uniqueId = 0;
+	let unique;
 	myLibrary.forEach((book) => {
+		unique = myLibrary.indexOf(book);
 		let bookRead = "";
 		if (book.read === "true") {
 			bookRead = "READ";
@@ -23,18 +31,24 @@ function renderBook() {
 			bookRead = "NOT READ";
 		}
 		let text = `
-		<div class="gallery-card data-unique-id${uniqueId}">
+		<div class="gallery-card">
 			<p>${book.title}</p>
 			<p>${book.author}</p>
 			<p>${book.pages} pages</p>
 			<button class="read-it">${bookRead}</button>
-			<button data-unique-id${uniqueId}>DELETE</button>
+			<button class="delete ${unique}">DELETE</button>
 		</div>
 	`;
-		uniqueId++;
 		gallery.insertAdjacentHTML("afterbegin", text);
 	});
 }
+
+gallery.addEventListener("click", (e) => {
+	if (e.target.classList.contains("delete")) {
+		e.target.parentElement.remove();
+	}
+	myLibrary.splice(parseInt(e.target.classList[1]), 1);
+});
 
 function addNewBook() {
 	let title = document.querySelector(".card-title").value;
@@ -66,10 +80,6 @@ function Book(title, author, pages, read) {
 	this.read = read;
 }
 
-let myLibrary = [
-	// { title: "Atomic Habits", author: "James Clear", pages: "222", read: true },
-];
-
 Book.prototype.info = function (title, author, pages, read) {
 	if (this.read) {
 		return `${this.title} was written by ${this.author}, it has ${this.pages} and was read.`;
@@ -77,3 +87,5 @@ Book.prototype.info = function (title, author, pages, read) {
 		return `${this.title} was written by ${this.author}, it has ${this.pages} and was not read.`;
 	}
 };
+
+renderBook();
