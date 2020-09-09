@@ -3,6 +3,15 @@ const card = document.querySelector(".card");
 const addToLibrary = document.querySelector(".card-add");
 const gallery = document.querySelector(".gallery");
 
+let myLibrary;
+
+if (localStorage.length === 0) {
+	myLibrary = [];
+} else {
+	myLibrary = JSON.parse(localStorage.getItem("book"));
+	renderBook();
+}
+
 addBtn.addEventListener("click", (ev) => {
 	card.classList.toggle("card-hidden");
 });
@@ -13,15 +22,10 @@ addToLibrary.addEventListener("click", (ev) => {
 	card.reset();
 });
 
-let myLibrary = [
-	{ title: "Atomic Habits", author: "James Clear", pages: "222", read: true },
-	{ title: "Can't Hurt Me", author: "David Goggins", pages: "225", read: true },
-];
-
-let unique;
-
 function renderBook() {
 	let unique;
+	localStorage.setItem("book", JSON.stringify(myLibrary));
+
 	myLibrary.forEach((book) => {
 		unique = myLibrary.indexOf(book);
 		let bookRead = "";
@@ -48,6 +52,11 @@ gallery.addEventListener("click", (e) => {
 		e.target.parentElement.remove();
 	}
 	myLibrary.splice(parseInt(e.target.classList[1]), 1);
+	localStorage.setItem("book", JSON.stringify(myLibrary));
+});
+
+gallery.addEventListener("click", (e) => {
+	console.log(e.target);
 });
 
 function addNewBook() {
@@ -87,5 +96,3 @@ Book.prototype.info = function (title, author, pages, read) {
 		return `${this.title} was written by ${this.author}, it has ${this.pages} and was not read.`;
 	}
 };
-
-renderBook();
