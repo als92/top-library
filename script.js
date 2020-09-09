@@ -1,86 +1,84 @@
-const addBtn = document.querySelector(".app-add-btn__btn");
+const addBtn = document.querySelector(".app-add-btn");
 const card = document.querySelector(".card");
 const addToLibrary = document.querySelector(".card-add");
 const gallery = document.querySelector(".gallery");
 
-let myLibrary;
+let myLibrary = [
+	{ title: "Atomic Habits", author: "James Clear", pages: 320, read: true },
+	{ title: "Factotum", author: "Charles Bukowski", pages: 288, read: false },
+];
 
-if (localStorage.length === 0) {
-	myLibrary = [];
-} else {
-	myLibrary = JSON.parse(localStorage.getItem("book"));
-	renderBook();
-}
-
-addBtn.addEventListener("click", (ev) => {
-	card.classList.toggle("card-hidden");
-});
-
-addToLibrary.addEventListener("click", (ev) => {
-	ev.preventDefault();
-	addNewBook();
-	card.reset();
-});
-
-function renderBook() {
-	let unique;
-	localStorage.setItem("book", JSON.stringify(myLibrary));
-
-	myLibrary.forEach((book) => {
-		unique = myLibrary.indexOf(book);
-		let bookRead = "";
-		if (book.read === "true") {
-			bookRead = "READ";
+// displays books which are stored in array
+function displayBooks(arr) {
+	arr.map((book, index) => {
+		let readStatus = "";
+		if (book.read) {
+			readStatus = "READ";
 		} else {
-			bookRead = "NOT READ";
+			readStatus = "NOT READ";
 		}
 		let text = `
-		<div class="gallery-card">
-			<p>${book.title}</p>
-			<p>${book.author}</p>
-			<p>${book.pages} pages</p>
-			<button class="read-it">${bookRead}</button>
-			<button class="delete ${unique}">DELETE</button>
-		</div>
-	`;
-		gallery.insertAdjacentHTML("afterbegin", text);
+			<div class="gallery-card">
+	 			<p>${book.title}</p>
+ 				<p>${book.author}</p>
+ 				<p>${book.pages} pages</p>
+ 				<button data-read>${readStatus}</button>
+ 				<button data-index=${index} data-delete>DELETE</button>
+ 			</div>
+		`;
+
+		gallery.insertAdjacentHTML("beforeend", text);
 	});
 }
 
+// when form is completed, this func is added to array and being displayed
+function addNewBook(e) {
+	let title = e.target.parentElement[0].value;
+	let author = e.target.parentElement[1].value;
+	let pages = e.target.parentElement[2].value;
+	let read = e.target.parentElement[3].checked;
+
+	let readStatus = "";
+	if (read) {
+		readStatus = "READ";
+	} else {
+		readStatus = "NOT READ";
+	}
+	let index = myLibrary.length;
+	let text = `
+		<div class="gallery-card">
+			<p>${title}</p>
+			<p>${author}</p>
+			<p>${pages} pages</p>
+			<button data-read>${readStatus}</button>
+			<button data-index=${index} data-delete>DELETE</button>
+		</div>
+	`;
+
+	gallery.insertAdjacentHTML("beforeend", text);
+
+	myLibrary.push(new Book(title, author, pages, read));
+}
+
+// Event listener to show Book form
+addBtn.addEventListener("click", () => {
+	card.classList.toggle("card-hidden");
+});
+
+// Event Listener to add book to library
+addToLibrary.addEventListener("click", (e) => {
+	e.preventDefault();
+	addNewBook(e);
+	card.reset();
+});
+
+// Event Listener which deletes books
 gallery.addEventListener("click", (e) => {
-	if (e.target.classList.contains("delete")) {
+	if (e.target.dataset.hasOwnProperty("delete")) {
+		myLibrary.splice(e.target.dataset.index, 1);
 		e.target.parentElement.remove();
 	}
-	myLibrary.splice(parseInt(e.target.classList[1]), 1);
-	localStorage.setItem("book", JSON.stringify(myLibrary));
 });
-
-gallery.addEventListener("click", (e) => {
-	console.log(e.target);
-});
-
-function addNewBook() {
-	let title = document.querySelector(".card-title").value;
-	let author = document.querySelector(".card-author").value;
-	let pages = document.querySelector(".card-pages").value;
-	let readCheckbox = document.querySelector("#read");
-	let readStatus;
-	if (title === "" || author === "") {
-		return;
-	} else {
-		if (readCheckbox.checked) {
-			readStatus = "true";
-		} else {
-			readStatus = "false";
-		}
-
-		let newBook = new Book(title, author, pages, readStatus);
-
-		myLibrary.push(newBook);
-		gallery.innerHTML = "";
-		renderBook();
-	}
-}
 
 function Book(title, author, pages, read) {
 	this.title = title;
@@ -89,10 +87,4 @@ function Book(title, author, pages, read) {
 	this.read = read;
 }
 
-Book.prototype.info = function (title, author, pages, read) {
-	if (this.read) {
-		return `${this.title} was written by ${this.author}, it has ${this.pages} and was read.`;
-	} else {
-		return `${this.title} was written by ${this.author}, it has ${this.pages} and was not read.`;
-	}
-};
+displayBooks(myLibrary);
