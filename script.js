@@ -3,10 +3,7 @@ const card = document.querySelector(".card");
 const addToLibrary = document.querySelector(".card-add");
 const gallery = document.querySelector(".gallery");
 
-let myLibrary = [
-	{ title: "Atomic Habits", author: "James Clear", pages: 320, read: true },
-	{ title: "Factotum", author: "Charles Bukowski", pages: 288, read: false },
-];
+let myLibrary = JSON.parse(localStorage.getItem("books")) || [];
 
 // displays books which are stored in array
 function displayBooks(arr) {
@@ -22,7 +19,7 @@ function displayBooks(arr) {
 	 			<p>${book.title}</p>
  				<p>${book.author}</p>
  				<p>${book.pages} pages</p>
- 				<button data-read>${readStatus}</button>
+ 				<button data-read data-index=${index}>${readStatus}</button>
  				<button data-index=${index} data-delete>DELETE</button>
  			</div>
 		`;
@@ -50,35 +47,61 @@ function addNewBook(e) {
 			<p>${title}</p>
 			<p>${author}</p>
 			<p>${pages} pages</p>
-			<button data-read>${readStatus}</button>
+			<button data-read data-index=${index}>${readStatus}</button>
 			<button data-index=${index} data-delete>DELETE</button>
 		</div>
 	`;
 
 	gallery.insertAdjacentHTML("beforeend", text);
-
 	myLibrary.push(new Book(title, author, pages, read));
+	localStorage.setItem("books", JSON.stringify(myLibrary));
 }
 
-// Event listener to show Book form
+function updateReadStatus(e) {
+	if (e.target.dataset.hasOwnProperty("read")) {
+		let idx = e.target.dataset.index;
+		let [card] = myLibrary.splice(idx, 1);
+		if (card.read) {
+			e.target.innerText = "NOT READ";
+			card.read = false;
+		} else {
+			e.target.innerText = "READ";
+			card.read = true;
+		}
+		myLibrary.splice(idx, 1, card);
+		localStorage.setItem("books", JSON.stringify(myLibrary));
+	}
+}
+
+// get users form and add book to library
+function addBookToLibrary(e) {
+	e.preventDefault();
+	addNewBook(e);
+	card.reset();
+}
+
+// remove book from the library user has selected
+function deleteBook(e) {
+	if (e.target.dataset.hasOwnProperty("delete")) {
+		myLibrary.splice(e.target.dataset.index, 1);
+		e.target.parentElement.remove();
+		localStorage.setItem("books", JSON.stringify(myLibrary));
+	}
+}
+
+//update book's read status
+gallery.addEventListener("click", updateReadStatus);
+
+// Event listener which shows book form to user
 addBtn.addEventListener("click", () => {
 	card.classList.toggle("card-hidden");
 });
 
-// Event Listener to add book to library
-addToLibrary.addEventListener("click", (e) => {
-	e.preventDefault();
-	addNewBook(e);
-	card.reset();
-});
+// Event Listener which adds book to library
+addToLibrary.addEventListener("click", addBookToLibrary);
 
 // Event Listener which deletes books
-gallery.addEventListener("click", (e) => {
-	if (e.target.dataset.hasOwnProperty("delete")) {
-		myLibrary.splice(e.target.dataset.index, 1);
-		e.target.parentElement.remove();
-	}
-});
+gallery.addEventListener("click", deleteBook);
 
 function Book(title, author, pages, read) {
 	this.title = title;
